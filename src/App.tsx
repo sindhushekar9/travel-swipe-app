@@ -1,20 +1,20 @@
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
+import { Routes, Route } from "react-router-dom";
+import Layout from './shared/Layout';
+import Home from './pages/Home';
+import SwiperStats from './pages/SwiperStats';
+import SwiperProfile from './pages/Profile';
 
 function App() {
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="liked" element={<SwiperStats />} />
+        <Route path="profile" element={<SwiperProfile />} />
+      </Route>
+    </Routes>
   )
 }
 
