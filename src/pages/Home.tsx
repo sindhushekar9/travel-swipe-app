@@ -25,7 +25,7 @@ export default function Home() {
                     minHeight: 'auto',
                 }}
             >
-                <Stack spacing={3} sx={{ width: '100%', alignItems: 'center' }}>
+                <Stack sx={{ width: '100%', alignItems: 'center' }}>
                     <Card
                         sx={{
                             backgroundColor: 'transparent',
