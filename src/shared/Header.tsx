@@ -1,11 +1,12 @@
-import { AppBar, Toolbar, Typography } from "@mui/material";
+import { AppBar, Avatar, Toolbar, Typography } from "@mui/material";
 
 export default function Header() {
   return (
     <AppBar position="fixed">
       <Toolbar>
+        <Avatar alt="Remy Sharp" src="/AppLogo.png" />
         <Typography variant="h6">
-          Travel Swipe
+          GoWander
         </Typography>
       </Toolbar>
     </AppBar>
