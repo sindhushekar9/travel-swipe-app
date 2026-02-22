@@ -7,7 +7,6 @@ import {
     Stack,
     Button,
     FormControl,
-    InputLabel,
     Select,
     MenuItem,
 } from "@mui/material";
