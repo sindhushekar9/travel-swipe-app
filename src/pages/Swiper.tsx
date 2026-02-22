@@ -1,182 +1,171 @@
-import React, { useState } from "react";
 import {
     Box,
     Card,
     CardMedia,
-    CardContent,
     Typography,
-    Button,
+    IconButton,
     Stack,
+    Button,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
 } from "@mui/material";
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import { destinations, FilterCategory } from "../constants/Destinations";
+import { useState } from "react";
 
-interface Destination {
-    id: number;
-    name: string;
-    description: string;
-    image: string;
-}
+export default function SwiperPage() {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [selectedCategory, setSelectedCategory] = useState("All");
 
-const destinationsData: Destination[] = [
-    { id: 1, name: "Santorini, Greece", description: "Whitewashed houses and stunning sunsets.", image: "/images/santorini.jpg" },
-    { id: 2, name: "Kyoto, Japan", description: "Ancient temples and cherry blossoms.", image: "/images/kyoto.jpg" },
-    { id: 3, name: "Banff, Canada", description: "Mountains, lakes, and outdoor adventures.", image: "/images/banff.jpg" },
-    { id: 4, name: "Bali, Indonesia", description: "Beaches, rice terraces, and culture.", image: "/images/bali.jpg" },
-    // add more destinations if needed
-];
+    const handleNext = () => setCurrentIndex((prev) => prev + 1);
+    const handleReset = () => setCurrentIndex(0);
 
-const SWIPE_THRESHOLD = 100; // pixels to consider a swipe
-
-interface DragState {
-    startX: number;
-    x: number;
-    dragging: boolean;
-}
-
-export default function Swiper() {
-    const [cards, setCards] = useState<Destination[]>(destinationsData);
-    const [liked, setLiked] = useState<Destination[]>([]);
-    const [disliked, setDisliked] = useState<Destination[]>([]);
-    const [drag, setDrag] = useState<DragState>({ startX: 0, x: 0, dragging: false });
-
-    // Mouse drag handlers
-    const handleMouseDown = (e: React.MouseEvent) => {
-        setDrag({ startX: e.clientX, x: e.clientX, dragging: true });
+    const handleCategoryChange = (event: any) => {
+        setSelectedCategory(event.target.value);
+        setCurrentIndex(0); // reset index when category changes
     };
 
-    const handleMouseMove = (e: React.MouseEvent) => {
-        if (!drag.dragging) return;
-        setDrag(prev => ({ ...prev, x: e.clientX }));
-    };
+    const filteredDestinations =
+        selectedCategory === "All"
+            ? destinations
+            : destinations.filter((d) => d.category === selectedCategory);
 
-    const handleMouseUp = () => {
-        if (!drag.dragging) return;
-        const dx = drag.x - drag.startX;
+    if (currentIndex >= filteredDestinations.length) {
+        return (
+            <Box
+                sx={{
+                    minHeight: "100vh",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    bgcolor: "#f5f5f5",
+                    gap: 2,
+                }}
+            >
+                <Typography variant="h6">No more destinations!</Typography>
 
-        const newCards = [...cards];
-        const top = newCards.pop();
-        if (!top) return;
+                <Button variant="contained" onClick={handleReset}>
+                    Reset
+                </Button>
+            </Box>
+        );
+    }
 
-        if (dx > SWIPE_THRESHOLD) {
-            setLiked(prev => [...prev, top]); // swipe right → like
-        } else if (dx < -SWIPE_THRESHOLD) {
-            setDisliked(prev => [...prev, top]); // swipe left → dislike
-        } else {
-            // if swipe too small, keep card
-            newCards.push(top);
-        }
-
-        setCards(newCards);
-        setDrag({ startX: 0, x: 0, dragging: false });
-    };
-
-    // Programmatic buttons
-    const swipe = (dir: "left" | "right") => {
-        if (cards.length === 0) return;
-        const newCards = [...cards];
-        const top = newCards.pop();
-        if (!top) return;
-
-        if (dir === "right") setLiked(prev => [...prev, top]);
-        if (dir === "left") setDisliked(prev => [...prev, top]);
-        setCards(newCards);
-    };
+    const visibleCards = filteredDestinations.slice(currentIndex, currentIndex + 3);
 
     return (
         <Box
             sx={{
-                minHeight: "100vh",
-                width: "100%",
+                minHeight: "calc(100vh - 152px)",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                pt: 4,
-                px: 2,
-                overflowY: "auto",
+                bgcolor: "#f5f5f5",
+                p: 3,
+                mt: 8,
+                gap: 3,
             }}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onTouchStart={(e) =>
-                handleMouseDown({
-                    clientX: e.touches[0].clientX,
-                } as any as React.MouseEvent)
-            }
-            onTouchMove={(e) =>
-                handleMouseMove({
-                    clientX: e.touches[0].clientX,
-                } as any as React.MouseEvent)
-            }
-            onTouchEnd={handleMouseUp}
         >
-            {/* Card Stack */}
+            {/* MUI Dropdown Filter aligned to right */}
+            <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end"}}>
+                <FormControl variant="standard" sx={{ minWidth: 120 }} size="small">
+                    <Select value={selectedCategory} label="Category" onChange={handleCategoryChange}>
+                        <MenuItem value="All">All</MenuItem>
+                        {FilterCategory.map((category) => (
+                            <MenuItem key={category} value={category}>
+                                {category}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Box>
+
+            {/* Cards */}
             <Box
                 sx={{
-                    width: { xs: "100%", sm: "70%", md: "50%" },
-                    height: { xs: "60vh", sm: "70vh" },
                     position: "relative",
+                    width: {xs: '100%', sm: '450px'},
+                    height: "calc(100vh - 220px)",
+                    textAlign: "center",
                 }}
             >
-                {[...cards].map((dest, index) => {
-                    const isTop = index === cards.length - 1;
+                {visibleCards.map((destination, index) => {
+                    const isTopCard = index === 0;
+
                     return (
                         <Card
-                            key={dest.id}
+                            key={destination.id}
                             sx={{
                                 position: "absolute",
                                 width: "100%",
-                                height: "100%",
-                                cursor: isTop ? "grab" : "default",
-                                transform: isTop && drag.dragging ? `translateX(${drag.x - drag.startX}px)` : "translateX(0px)",
-                                transition: isTop && drag.dragging ? "none" : "transform 0.3s ease-out",
-                                zIndex: index,
-                                borderRadius: 2,
-                                boxShadow: 3,
+                                borderRadius: 3,
+                                overflow: "hidden",
+                                boxShadow: 4,
+                                transform: `scale(${1 - index * 0.05})`,
+                                top: `${index * 10}px`,
+                                zIndex: visibleCards.length - index,
+                                transition: "all 0.3s ease",
+                                bgcolor: "#fff",
                             }}
-                            onMouseDown={isTop ? handleMouseDown : undefined}
                         >
-                            <CardMedia
-                                component="img"
-                                height="70%"
-                                image={dest.image}
-                                alt={dest.name}
-                                sx={{ borderTopLeftRadius: 8, borderTopRightRadius: 8 }}
-                            />
-                            <CardContent>
-                                <Typography variant="h6" fontWeight="bold">{dest.name}</Typography>
-                                <Typography variant="body2">{dest.description}</Typography>
-                            </CardContent>
+                            {/* Header */}
+                            <Box sx={{ py: 1, px: 2 }}>
+                                <Typography variant="subtitle1" fontWeight="bold">
+                                    {destination.title}
+                                </Typography>
+                            </Box>
+
+                            {/* Image */}
+                            <Box sx={{ position: "relative" }}>
+                                <CardMedia
+                                    component="img"
+                                    height="350"
+                                    image={destination.image}
+                                    alt={destination.title}
+                                    sx={{ objectFit: "cover", width: "100%" }}
+                                />
+                                <Box
+                                    sx={{
+                                        position: "absolute",
+                                        bottom: 0,
+                                        left: 0,
+                                        bgcolor: "rgba(0,0,0,0.6)",
+                                        color: "#fff",
+                                        p: 2,
+                                    }}
+                                >
+                                    <Typography variant="body2">{destination.description}</Typography>
+                                </Box>
+                            </Box>
+
+                            {/* Footer */}
+                            {isTopCard && (
+                                <Box sx={{ p: 1 }}>
+                                    <Stack direction="row" justifyContent="center" spacing={3}>
+                                        <IconButton
+                                            onClick={handleNext}
+                                            sx={{ bgcolor: "#99999939", "&:hover": { bgcolor: "#99999939" } }}
+                                        >
+                                            <ThumbDownIcon sx={{ color: "#999999", fontSize: 28 }} />
+                                        </IconButton>
+
+                                        <IconButton
+                                            onClick={handleNext}
+                                            sx={{ bgcolor: "#828ff347", "&:hover": { bgcolor: "#828ff347" } }}
+                                        >
+                                            <ThumbUpIcon sx={{ color: "#8290f3", fontSize: 28 }} />
+                                        </IconButton>
+                                    </Stack>
+                                </Box>
+                            )}
                         </Card>
                     );
                 })}
-                {cards.length === 0 && (
-                    <Typography
-                        variant="h6"
-                        sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", textAlign: "center" }}
-                    >
-                        No more cards!
-                    </Typography>
-                )}
             </Box>
-
-            {/* Like / Dislike Buttons */}
-            <Stack direction="row" spacing={2} sx={{ mt: 4 }}>
-                <Button variant="contained" color="error" onClick={() => swipe("left")}>Dislike</Button>
-                <Button variant="contained" color="success" onClick={() => swipe("right")}>Like</Button>
-            </Stack>
-
-            {/* Liked / Disliked Counts */}
-            <Typography sx={{ mt: 2 }}>Liked: {liked.length}</Typography>
-            <Typography>Disliked: {disliked.length}</Typography>
-
-            {/* Reset Button */}
-            {cards.length === 0 && (liked.length > 0 || disliked.length > 0) && (
-                <Button sx={{ mt: 2 }} variant="outlined" onClick={() => {
-                    setCards(destinationsData);
-                    setLiked([]);
-                    setDisliked([]);
-                }}>
-                    Reset
-                </Button>
-            )}
         </Box>
     );
 }
