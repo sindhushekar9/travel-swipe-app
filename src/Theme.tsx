@@ -24,6 +24,19 @@ const customTheme = createTheme({
           backgroundColor: "#8290f3",
         },
       },
+    },
+    MuiBottomNavigationAction: {
+      styleOverrides: {
+        root: {
+          "&.active": {
+            color: "#8290f3",
+
+            "& .MuiSvgIcon-root": {
+              fontWeight: 600,
+            },
+          },
+        },
+      },
     }
   },
 });
