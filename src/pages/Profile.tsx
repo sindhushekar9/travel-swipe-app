@@ -24,7 +24,7 @@ export default function Profile() {
         >
             <Box
                 sx={{
-                    maxWidth: "100%",
+                    width: { xs: "100%", sm: "450px" },
                     bgcolor: "#fff",
                     borderRadius: 3,
                     p: 3,

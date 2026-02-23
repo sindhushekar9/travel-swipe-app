@@ -174,16 +174,16 @@ export default function Destinations() {
                                         <Stack direction="row" justifyContent="center" spacing={3}>
                                             <IconButton
                                                 onClick={() => handleNext(destination, false)}
-                                                sx={{ bgcolor: "#99999939", "&:hover": { bgcolor: "#ffcccc" }, "&:active": { bgcolor: "#ffcccc" }, transition: "all 0.1s ease-in-out" }}
+                                                color="error"
                                             >
-                                                <ThumbDownIcon sx={{ color: "#999999", fontSize: 28 }} />
+                                                <ThumbDownIcon sx={{ fontSize: 28 }} />
                                             </IconButton>
 
                                             <IconButton
                                                 onClick={() => handleNext(destination, true)}
-                                                sx={{ bgcolor: "#99999939", "&:hover": { bgcolor: "#ccffcc" }, "&:active": { bgcolor: "#ccffcc" }, transition: "all 0.1s ease-in-out" }}
+                                                color="success"
                                             >
-                                                <ThumbUpIcon sx={{ color: "#999999", fontSize: 28 }} />
+                                                <ThumbUpIcon sx={{ fontSize: 28 }} />
                                             </IconButton>
                                         </Stack>
                                     </Box>
