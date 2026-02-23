@@ -89,7 +89,7 @@ export default function Profile() {
                     variant="filled"
                     sx={{ width: '100%' }}
                 >
-                    This is a success Alert inside a Snackbar!
+                    Action completed successfully!
                 </Alert>
             </Snackbar>
         </Box>

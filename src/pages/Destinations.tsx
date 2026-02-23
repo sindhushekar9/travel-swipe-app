@@ -90,9 +90,9 @@ export default function Destinations() {
                     </Select>
                 </FormControl>
 
-                <IconButton
+                <IconButton sx={{backgroundColor: '#eeeeee'}}
                     onClick={() => setOpen(true)}>
-                    <MoreVertIcon />
+                    <MoreVertIcon sx={{fontSize: 25}}/>
                 </IconButton>
             </Box>
 
@@ -114,6 +114,7 @@ export default function Destinations() {
                         width: { xs: "100%", sm: "450px" },
                         height: "calc(100vh - 220px)",
                         textAlign: "center",
+                        overflow: "auto"
                     }}
                 >
                     {visibleCards.map((destination, index) => {
@@ -146,7 +147,7 @@ export default function Destinations() {
                                 <Box sx={{ position: "relative" }}>
                                     <CardMedia
                                         component="img"
-                                        height="350"
+                                        height="300"
                                         image={destination.image}
                                         alt={destination.title}
                                         sx={{ objectFit: "cover", width: "100%" }}
