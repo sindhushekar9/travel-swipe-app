@@ -102,7 +102,7 @@ export default function Home() {
                         </Typography>
                     </CardContent>
                     <CardActions>
-                        <Button component={NavLink} to="/swiper" variant="contained">
+                        <Button component={NavLink} to="/destinations" variant="contained">
                             Get Started
                         </Button>
                     </CardActions>
