@@ -91,10 +91,8 @@ export default function Destinations() {
                 </FormControl>
 
                 <IconButton
-                    onClick={() => setOpen(true)}
-                    sx={{ bgcolor: "#828ff347", "&:hover": { bgcolor: "#828ff347" } }}
-                >
-                    <MoreVertIcon sx={{ color: "#8290f3", fontSize: 23 }} />
+                    onClick={() => setOpen(true)}>
+                    <MoreVertIcon />
                 </IconButton>
             </Box>
 
@@ -174,16 +172,16 @@ export default function Destinations() {
                                         <Stack direction="row" justifyContent="center" spacing={3}>
                                             <IconButton
                                                 onClick={() => handleNext(destination, false)}
-                                                color="error"
+                                                sx={{ bgcolor: "#99999939", "&:hover": { bgcolor: "#99999939" } }}
                                             >
-                                                <ThumbDownIcon sx={{ fontSize: 28 }} />
+                                                <ThumbDownIcon sx={{ color: "#828ff3b9", fontSize: 23 }} />
                                             </IconButton>
 
                                             <IconButton
                                                 onClick={() => handleNext(destination, true)}
-                                                color="success"
+                                                sx={{ bgcolor: "#99999939", "&:hover": { bgcolor: "#99999939" } }}
                                             >
-                                                <ThumbUpIcon sx={{ fontSize: 28 }} />
+                                                <ThumbUpIcon sx={{ color: "#828ff3b9", fontSize: 23 }} />
                                             </IconButton>
                                         </Stack>
                                     </Box>
