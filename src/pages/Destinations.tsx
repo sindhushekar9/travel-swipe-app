@@ -10,6 +10,7 @@ import {
     Select,
     MenuItem,
     Drawer,
+    CircularProgress
 } from "@mui/material";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
@@ -23,6 +24,7 @@ export default function Destinations() {
     const [liked, setLiked] = useState<any[]>([]);
     const [disliked, setDisliked] = useState<any[]>([]);
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     // Handle rating
     const handleNext = (destination: any, isLiked: boolean) => {
@@ -90,9 +92,9 @@ export default function Destinations() {
                     </Select>
                 </FormControl>
 
-                <IconButton sx={{backgroundColor: '#eeeeee'}}
+                <IconButton sx={{ backgroundColor: '#eeeeee' }}
                     onClick={() => setOpen(true)}>
-                    <MoreVertIcon sx={{fontSize: 25}}/>
+                    <MoreVertIcon sx={{ fontSize: 25 }} />
                 </IconButton>
             </Box>
 
@@ -144,14 +146,37 @@ export default function Destinations() {
                                 </Box>
 
                                 {/* Image */}
-                                <Box sx={{ position: "relative" }}>
+                                <Box sx={{ position: "relative", height: 300 }}>
+                                    {/* Spinner overlay */}
+                                    {loading && (
+                                        <Box
+                                            sx={{
+                                                position: "absolute",
+                                                top: 0,
+                                                left: 0,
+                                                width: "100%",
+                                                height: "100%",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                bgcolor: "#f0f0f0", // optional placeholder background
+                                                zIndex: 1,
+                                            }}
+                                        >
+                                            <CircularProgress />
+                                        </Box>
+                                    )}
+
                                     <CardMedia
                                         component="img"
                                         height="300"
                                         image={destination.image}
                                         alt={destination.title}
-                                        sx={{ objectFit: "cover", width: "100%" }}
+                                        sx={{ objectFit: "cover", width: "100%", display: loading ? "none" : "block" }}
+                                        onLoad={() => setLoading(false)}
                                     />
+
+                                    {/* Description overlay */}
                                     <Box
                                         sx={{
                                             position: "absolute",
@@ -166,7 +191,6 @@ export default function Destinations() {
                                         <Typography variant="body2">{destination.description}</Typography>
                                     </Box>
                                 </Box>
-
                                 {/* Footer */}
                                 {isTopCard && (
                                     <Box sx={{ p: 1 }}>
